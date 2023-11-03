@@ -6,7 +6,7 @@
 *&
 *&---------------------------------------------------------------------*
 
-REPORT z_aula_10_objeto_bloqueio.
+REPORT z_objeto_bloqueio.
 
 DATA: wa_mara TYPE mara.
 
