@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>Z_AJUDA_PESQUISA</title>
+</head>
+<body bgcolor="#FFFFE0">
+<font size="3" face = "Arial" color="#000000"><b>Code listing for: Z_AJUDA_PESQUISA</b></font>
+<br>
+<font size="3" face = "Arial" color="#000000"><b>Description:  Ajuda de Pesquisa</b></font>
+<hr>
+<pre width="100">
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*& Report  Z_AJUDA_PESQUISA</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&</font>
+<font color ="#0000FF">*&---------------------------------------------------------------------*</font>
+
+REPORT Z_AJUDA_PESQUISA.
+
+PARAMETERS: p_matnr TYPE char18 MATCHCODE OBJECT Z_AJUDAPESQUISA,
+            p_maktx TYPE makt-maktx.
+
+CALL FUNCTION 'ENQUEUE_EZOBJBLOQUEIO'
+ EXPORTING
+   MODE_ZVIEW           = 'E'
+   MATNR                = p_matnr
+   MAKTX                = p_maktx
+   X_MATNR              = ' '
+   X_MAKTX              = ' '
+   _SCOPE               = '2'
+   _WAIT                = ' '
+   _COLLECT             = ' '
+ EXCEPTIONS
+   FOREIGN_LOCK         = 1
+   SYSTEM_FAILURE       = 2
+   OTHERS               = 3
+          .
+IF sy-subrc &lt;&gt; 0.
+<font color ="#0000FF">* Implement suitable error handling here</font>
+  MESSAGE 'Objeto Bloqueado por Usuário APASSARELLI' TYPE 'E'.
+ENDIF.
+
+
+CALL FUNCTION 'DEQUEUE_EZOBJBLOQUEIO'
+ EXPORTING
+   MODE_ZVIEW       = 'E'
+   MATNR            = p_matnr
+   MAKTX            = p_maktx
+   X_MATNR          = ' '
+   X_MAKTX          = ' '
+   _SCOPE           = '3'
+   _SYNCHRON        = ' '
+   _COLLECT         = ' '
+          .
+
+
+<font color ="#0000FF">*Messages</font>
+<font color ="#0000FF">*----------------------------------------------------------</font>
+<font color ="#0000FF">*</font>
+<font color ="#0000FF">* Message class: Hard coded</font>
+<font color ="#0000FF">*   Objeto Bloqueado por Usuário APASSARELLI</font>
+</pre>
+<hr>
+<font size="2" face = "Sans Serif">Extracted by Direct Download Enterprise version 1.3.1 - Desenvolvedor JCremm Sap Release 740
+</font>
+</body>
+</html>
