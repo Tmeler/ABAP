@@ -1,0 +1,79 @@
+*&---------------------------------------------------------------------*
+*& Report  Z_FIND_SCREEN_EXIT
+*&
+*&---------------------------------------------------------------------*
+*&
+*&
+*&---------------------------------------------------------------------*
+
+REPORT Z_FIND_SCREEN_EXIT.
+
+TABLES: MODSAP, MODACT, TSTC.
+
+PARAMETERS: INPUT1 LIKE TSTC-TCODE DEFAULT ' ',
+
+INPUT2 LIKE MODSAP-TYP DEFAULT ' '.
+
+DATA: SEARCH1(6),
+
+SEARCH2(3),
+
+SEARCH3 LIKE MODSAP-MEMBER.
+
+DATA : FIRST_ROW VALUE 'Y'.
+
+CONCATENATE: '%' INPUT1 '%' INTO SEARCH1,
+
+'%' INPUT2 INTO SEARCH2.
+
+SELECT * FROM TSTC WHERE TCODE LIKE SEARCH1.
+
+FIRST_ROW = 'Y'.
+
+CHECK TSTC-PGMNA NE SPACE.
+
+CONCATENATE '%' TSTC-PGMNA '%' INTO SEARCH3.
+
+SELECT * FROM MODSAP WHERE TYP LIKE SEARCH2
+
+AND MEMBER LIKE SEARCH3.
+
+SELECT SINGLE * FROM MODACT WHERE MEMBER = MODSAP-NAME.
+
+IF FIRST_ROW EQ 'Y'.
+
+WRITE: /0 TSTC-TCODE, 6 TSTC-PGMNA, 16 MODSAP-NAME, 32 MODSAP-TYP,
+
+45 MODSAP-MEMBER, 70 MODACT-NAME.
+
+FIRST_ROW = 'N'.
+
+ELSE.
+
+WRITE: /16 MODSAP-NAME, 32 MODSAP-TYP, 45 MODSAP-MEMBER, 70 MODACT-NAME.
+
+ENDIF.
+
+CLEAR : MODSAP, MODACT.
+
+ENDSELECT.
+
+IF SY-SUBRC NE 0.
+
+WRITE : /0 TSTC-TCODE, 6 TSTC-PGMNA, 30 'No exits found'.
+
+ENDIF.
+
+CLEAR TSTC.
+
+ENDSELECT.
+
+END-OF-SELECTION.
+
+CLEAR: SEARCH1, SEARCH2, SEARCH3.
+
+
+*Selection texts
+*----------------------------------------------------------
+* INPUT1         Transação
+* INPUT2         Tipo de Exit
